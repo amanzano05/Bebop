@@ -1,11 +1,16 @@
+#Source code for controller
+
 #!/usr/bin/env python
+#Importing libraries from rospy client API
 import rospy
 from std_msgs.msg import String
 from std_msgs.msg import Empty
 from geometry_msgs.msg import Vector3
 from geometry_msgs.msg import Twist
 
+#Created a class for Controller
 class Controller:
+    #Function for initial start
     def __init__(self):
         rospy.init_node('Controller', anonymous=True)
         self.x = 0.0
@@ -22,7 +27,7 @@ class Controller:
         self.flying=False
         
         
-    
+    #Function for moving forward
     def front(self):
         if self.flying:
             self.x=self.speed
@@ -36,7 +41,7 @@ class Controller:
         else:
             print("\nyou are not flying")
     
-    
+    #Function for moving backward
     def back(self):
         if self.flying:
             self.x=(-1*self.speed)
@@ -50,7 +55,7 @@ class Controller:
         else:
             print("\nyou are not flying")
     
-    
+    #Function for moving right
     def right(self):
         if self.flying:
             self.x=0.0
@@ -64,7 +69,7 @@ class Controller:
         else:
             print("\nyou are not flying")
     
-    
+    #Function for moving left
     def left(self):
         if self.flying:
             self.x=0.0
@@ -78,7 +83,7 @@ class Controller:
         else:
             print("\nyou are not flying")
     
-    
+    #Functions for moving up
     def up(self):
         if self.flying:
             self.x=0.0
@@ -92,7 +97,7 @@ class Controller:
         else:
             print("\nyou are not flying")
     
-    
+    #Function for moving down
     def down(self):
         if self.flying:
             self.x=0.0
@@ -106,7 +111,7 @@ class Controller:
         else:
             print("\nyou are not flying")
     
-    
+    #Function for landing (self landing)
     def land(self):
         if self.flying:
             self.x=0.0
@@ -122,7 +127,8 @@ class Controller:
         else:
             print("\nyou are not flying")
     
-    
+    #Function for taking off
+    #Here is when we start to fly
     def takeOff(self):
         if not self.flying:
             self.flying = True
@@ -135,7 +141,7 @@ class Controller:
         else:
             print("\nYou are flying")
     
-    
+    #Function for rotating left
     def rotateLeft(self):
         if self.flying:
             self.x=0.0
@@ -149,7 +155,7 @@ class Controller:
         else:
             print("\nyou are not flying\n")
     
-    
+    #Function for rotating right
     def rotateRight(self):
         if self.flying:
             self.x=0.0
@@ -163,14 +169,15 @@ class Controller:
         else:
             print("\nyou are not flying\n")
             
-    
+    #Function to exit flying mode
     def exitMode(self):
+        #Cannot exit while currently flying
         if self.flying:
             print("\nYou cannot exit the mode while flying...\n")
         else:
             print("\nExiting mode\n")
             
-            
+     #Function for incrementing speed 
     def incrementSpeed(self):
         if (self.speed>=0.00 and self.speed<0.99):
             self.speed+=0.01
@@ -179,7 +186,7 @@ class Controller:
         print("speed++....."+str(self.speed))
             
         
-    
+    #Function for decrementing speed 
     def decrementSpeed(self):
         if (self.speed>=0.01 and self.speed<=1.00):
             self.speed-=0.01
@@ -187,14 +194,14 @@ class Controller:
             self.speed=0.00
         print("speed--....."+str(self.speed))
             
-    
+    #Function for setting speed
     def setSpeed(self, speedValue=0.02):
         if (speedValue>0.00 and speedValue<1.00):
             self.speed=speedValue
         else:
             print("Value incorrect...")
         
-    
+    #Function to reset all current values
     def resetValues(self):
         self.x = 0.0
         self.y = 0.0
