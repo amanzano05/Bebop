@@ -1,6 +1,5 @@
-#Source code for controller
-
 #!/usr/bin/env python
+#Source code for controller
 #Importing libraries from rospy client API
 import rospy
 from std_msgs.msg import String
@@ -10,25 +9,46 @@ from geometry_msgs.msg import Twist
 
 #Created a class for Controller
 class Controller:
-    #Function for initial start
+    #contructor. Initialization of variables
     def __init__(self):
-        rospy.init_node('Controller', anonymous=True)
-        self.x = 0.0
+        rospy.init_node('Controller', anonymous=True) #Initialize ROS node
+        #Variables used for coordinates for movement
+        self.x = 0.0 
         self.y = 0.0
         self.z = 0.0
-        self.throttle= 0.0
-        self.speed=0.02
+        
+        self.throttle= 0.0 #Variable used for rotation 
+        self.speed=0.02 #Variable used for speed
+
+        # This expresses velocity in free space broken into its linear and angular parts. 
+        # Geometry_msg/ twist message
         self.twist=Twist(Vector3(0.0,0.0,0.0), Vector3(0.0,0.0,0.0))
+
+        #Class to help run loops at a desired frequency.
         self.rate= rospy.Rate(20)
+        
+        #publishers for publishing our commands
+        #publish a message of type std_msgs/Empty to takeoff topic
         self.pub_takeoff=rospy.Publisher("bebop/takeoff", Empty, queue_size=10 )
+       
+        #publish the message of type std_msgs/Empty to land topic
         self.pub_landing=rospy.Publisher("bebop/land", Empty, queue_size=10 )
+        
+        #publish messages of type geometry_msgs/Twist to cmd_vel topic
         self.pub_move=rospy.Publisher('bebop/cmd_vel', Twist, queue_size=10)
+        
+        #message empty
         self.message_empty=Empty()
+
+        #Variable used to keep track of the drone status
         self.flying=False
         
         
     #Function for moving forward
     def front(self):
+        #if the drone is flying 
+        #set the speed to move forward 
+        # and publish the geometry_msgs/Twist message to cmd_vel topic
         if self.flying:
             self.x=self.speed
             self.y=0.0
@@ -42,6 +62,9 @@ class Controller:
             print("\nyou are not flying")
     
     #Function for moving backward
+    #if the drone is flying 
+    #set the speed to move backward 
+    #and publish the geometry_msgs/Twist message to cmd_vel topic 
     def back(self):
         if self.flying:
             self.x=(-1*self.speed)
@@ -56,6 +79,9 @@ class Controller:
             print("\nyou are not flying")
     
     #Function for moving right
+    #if the drone is flying 
+    #set the speed to move right 
+    #and publish the geometry_msgs/Twist message to cmd_vel topic
     def right(self):
         if self.flying:
             self.x=0.0
@@ -70,6 +96,9 @@ class Controller:
             print("\nyou are not flying")
     
     #Function for moving left
+    #if the drone is flying 
+    #set the speed to move left 
+    #and publish the geometry_msgs/Twist message to cmd_vel topic
     def left(self):
         if self.flying:
             self.x=0.0
@@ -84,6 +113,9 @@ class Controller:
             print("\nyou are not flying")
     
     #Functions for moving up
+    #if the drone is flying 
+    #set the speed to move up
+    #and publish the geometry_msgs/Twist message to cmd_vel topic
     def up(self):
         if self.flying:
             self.x=0.0
@@ -98,6 +130,9 @@ class Controller:
             print("\nyou are not flying")
     
     #Function for moving down
+    #if the drone is flying 
+    #set the speed to move down
+    #and publish the geometry_msgs/Twist message to cmd_vel topic
     def down(self):
         if self.flying:
             self.x=0.0
@@ -112,6 +147,9 @@ class Controller:
             print("\nyou are not flying")
     
     #Function for landing (self landing)
+    #if the drone is flying 
+    #set the speed to zero, and land 
+    #publish the message of type std_msgs/Empty to land topic
     def land(self):
         if self.flying:
             self.x=0.0
@@ -129,6 +167,9 @@ class Controller:
     
     #Function for taking off
     #Here is when we start to fly
+    #if the drone is not flying 
+    #set the speed to zero, and takeoff 
+    #publish the message of type std_msgs/Empty to takeoff topic 
     def takeOff(self):
         if not self.flying:
             self.flying = True
@@ -142,6 +183,9 @@ class Controller:
             print("\nYou are flying")
     
     #Function for rotating left
+    #if the drone is flying 
+    #set the speed to rotate left
+    #and publish the geometry_msgs/Twist message to cmd_vel topic
     def rotateLeft(self):
         if self.flying:
             self.x=0.0
@@ -156,6 +200,9 @@ class Controller:
             print("\nyou are not flying\n")
     
     #Function for rotating right
+    #if the drone is flying 
+    #set the speed to rotate right
+    #and publish the geometry_msgs/Twist message to cmd_vel topic
     def rotateRight(self):
         if self.flying:
             self.x=0.0
