@@ -11,8 +11,8 @@ from geometry_msgs.msg import Vector3
 from geometry_msgs.msg import Twist
 
 # Initializing global variable for controller
-myCon=controller.Controller() #MyCon is a variable to calls the function for controller?
-myCon.setSpeed(0.5)#Set speed of controller
+myCon=controller.Controller() # creates the object myCon from the class Controller
+myCon.setSpeed(0.5)#Set speed
 
 
 # ------functions------#
@@ -20,10 +20,11 @@ myCon.setSpeed(0.5)#Set speed of controller
 
 
 # when a key is pressed
+#the correspondig method to the key pressed is called
 def on_press(key):
     mySelection=str(key)  # gets the key pressed as string (variable mySelection is equal to current key being pressed)
-    printControl() #Print the following key afer being pressed
-    #Declaring decisions using if
+    printControl() #Print the keys used for controlling the drone
+    #Declaring decisions depending on the key pressed
     if (mySelection=="u't'"): myCon.front()
         
     elif (mySelection=="u'g'"): myCon.back()
@@ -59,7 +60,6 @@ def printKeys():
           "q:exit mode\n")
           
 #Creating a function that will print the control
-#Not to sure how to read this.
 def printControl():
     print("\n a:takeoff           t         u:up                \n"
           "    |                  |          |                  \n"
@@ -68,11 +68,11 @@ def printControl():
           " s:land                g         j:down              \n")
           
           
-#Creating a function for when a key is released.
+#Creating a function for when a key is released. 
+#if the key pressed is q and the status is not flying, the mode exists
 def on_release(key):
     mySelection=str(key)
-    #delcaring that if the selection is going up or in exit mode AND NOT currently flying... return false
-    #Meaning we have not realeased a key?
+
     if (mySelection == "u'q'") and not myCon.flying:
         return False
 
@@ -88,6 +88,7 @@ def selectMode():
     return mode
 
 #Function if we want to disconnect
+#if not flying  then disconnect
 def disconnect():
     if not myCon.flying: #can't disconnect while flying
         print("\nDisconnecting...\n")
@@ -103,6 +104,9 @@ def manual():
             on_release=on_release) as listener:
         printKeys()
         listener.join()
+
+
+######################################pending modes##########################################
 #Function for autonomous mode
 def autonomous():
     print("autonomus mode")
@@ -110,6 +114,7 @@ def autonomous():
 #Function for demo mode
 def demo():
     print("demo mode")
+#############################################################################################
     
 
 # global dictionay for all available modes to select
@@ -121,8 +126,7 @@ switchModes={
 }
 
 
-
-#need help here
+############################################main method######################################
 if __name__== '__main__':
     try:
         #rospy.init_node('keyCommands2', anonymous=True)
@@ -130,10 +134,11 @@ if __name__== '__main__':
         print("\nConnecting...")
         global connected
         connected=True
-        while not rospy.is_shutdown() and connected==True:
-            mode = selectMode()
+	#while rospy is running  and the drone is connected do some work
+        while not rospy.is_shutdown() and connected==True
+            mode = selectMode()#select the mode
             try:
-                switchModes.get(mode)()
+                switchModes.get(mode)()#try to call the method corresponding to the mode
             except:
                 print("\nWrong selection")
     except rospy.ROSInterruptException:
