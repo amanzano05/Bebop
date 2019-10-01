@@ -135,7 +135,7 @@ if __name__== '__main__':
         global connected
         connected=True
 	#while rospy is running  and the drone is connected do some work
-        while not rospy.is_shutdown() and connected==True
+        while not rospy.is_shutdown() and connected==True:
             mode = selectMode()#select the mode
             try:
                 switchModes.get(mode)()#try to call the method corresponding to the mode
