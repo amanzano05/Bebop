@@ -21,7 +21,7 @@ def camera_callback(data):
     #used to store the "image" resulting from the bridge
     stream=0
     #tries to get the "image from the bridge"
-    #if succesed show the image 
+    #if successful, show the image 
     #the "video" resulted is composite of many images precessed for the bridge
     try:
         stream=bridge.imgmsg_to_cv2(data, "bgr8")
