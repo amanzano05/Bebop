@@ -1,6 +1,7 @@
 #!/usr/bin/env python
-#Importing all required libraries
 
+
+#Importing all required libraries
 from __future__ import print_function
 
 
@@ -12,35 +13,33 @@ from std_msgs.msg import String
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 
-
-class image_converter:
-
-  def __init__(self): #Is this a function to initiate?
-    self.bridge = CvBridge()
-    self.image_sub = rospy.Subscriber('bebop/image_raw',Image,self.callback)
-
-  def callback(self,data):#Function to call the image back to bridge?
+#callback library for subcriber fro video
+#the function recieves as data of tipy image as argument.
+def camera_callback(data):
+    #bridge is used as global object for the brigde
+    global bridge
+    #used to store the "image" resulting from the bridge
+    stream=0
+    #tries to get the "image from the bridge"
+    #if succesed show the image 
+    #the "video" resulted is composite of many images precessed for the bridge
     try:
-      cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
+        stream=bridge.imgmsg_to_cv2(data, "bgr8")
     except CvBridgeError as e:
-      print(e)
-
-    (rows,cols,channels) = cv_image.shape
-    if cols > 60 and rows > 60 :
-      cv2.circle(cv_image, (50,50), 10, 255)
-
-    cv2.imshow("Image window", cv_image)
+        print(e)
+    cv2.imshow("Video", stream)
     cv2.waitKey(3)
 
-
-def main(args):
-  ic = image_converter() #Run image converter class
-  rospy.init_node('image_converter', anonymous=True)
-  try:
+##########main method#################
+if __name__ == '__main__':
+    #initialize the node 
+    rospy.init_node('Video_Stream', anonymous=True)
+    #global variables for objects
+    global bridge
+    global imageSub
+    #creates the bridge
+    bridge=CvBridge()
+    #subscribe to the topic
+    imageSub=rospy.Subscriber('bebop/image_raw', Image, camera_callback)
+    #keeps ROS running
     rospy.spin()
-  except KeyboardInterrupt: #Kill the process if key pressed?
-    print("Shutting down")
-  cv2.destroyAllWindows()
-
-if __name__ == '__main__':#Run main if name=main
-    main(sys.argv)
