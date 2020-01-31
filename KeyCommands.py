@@ -68,12 +68,38 @@ def on_press(key):
 		        print "here we go"
        		        text = r.recognize_google(audio) 
       		        print text
+                      
                         if text == "launch": 
                             myCon.takeOff()
                             manual();
                         if text == "land":
                             myCon.land()
                             manual();
+                        if text == "front":
+                            myCon.front()
+                            manual();
+                        if text == "back":
+                            myCon.back()
+                            manual();
+                        if text == "right":
+                            myCon.right()
+                            manual();
+                        if text == "left":
+                            myCon.left()
+                            manual();
+                        if text == "up":
+                            myCon.up()
+                            manual();
+                        if text == "down":
+                            myCon.down()
+                            manual();
+                        if text == "rotateLeft":
+                            myCon.rotateLeft()
+                            manual();
+                        if text == "rotateRight":
+                            myCon.rotateRight()
+                            manual();
+
 
                   
          	    except sr.UnknownValueError: 
