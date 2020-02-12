@@ -256,6 +256,10 @@ class Controller:
         self.z = 0.0
         self.throttle= 0.0
         self.speed=0.02
+
+    #Function to set a waypoint
+    def Setwaypoint(self):
+
         
 
     
