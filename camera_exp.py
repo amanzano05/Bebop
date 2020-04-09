@@ -31,7 +31,7 @@ def camera_callback(data):
     except CvBridgeError as e:
         print(e)
     faces = face_cascade.detectMultiScale(gray, 
-                                      scaleFactor=1.3,
+                                      scaleFactor=1.2,
                                       minNeighbors=5,
                                       minSize=(50,50),
                                       flags = cv2.CASCADE_SCALE_IMAGE)
