@@ -3,7 +3,7 @@
 
 #Importing all required libraries
 from __future__ import print_function
-#alfonso manzano
+
 
 import roslib
 import sys
