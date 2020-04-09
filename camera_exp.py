@@ -25,7 +25,7 @@ def camera_callback(data):
     #if succesed show the image 
     #the "video" resulted is composite of many images precessed for the bridge
     try:
-        face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+        face_cascade = cv2.CascadeClassifier('lbpcascade_frontalface_improved.xml')
         stream=bridge.imgmsg_to_cv2(data, "bgr8")
         gray = cv2.cvtColor(stream, cv2.COLOR_BGR2GRAY)
     except CvBridgeError as e:
