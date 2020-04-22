@@ -15,6 +15,28 @@ from geometry_msgs.msg import Vector3
 from geometry_msgs.msg import Twist
 
 
+
+          
+#Creating a function that will print the control
+def printControl():
+    print("\n a:takeoff           t        u:up      Rotation   \n"
+          "    |                  |          |                  \n"
+          "    |              f-------h      |       o<----->p  \n"
+          "    |                  |          |                  \n"
+          " s:land                g         j:down              \n"
+          "                                                     \n"
+          " z:increment speed                                   \n"
+          " x:decrement speed                                   \n"
+          "                                                     \n"
+          " b: Tracking mode                                    \n"
+          " n: Tracking mode                                    \n"
+          " m: Exit mode                                        \n"
+          " q: Exit                                             \n")
+
+
+
+
+
 #class for the tracker
 class Tracker:
     #constructor
@@ -337,7 +359,9 @@ class Tracker:
             self.first=True   
         elif (self.myKey == "u'm'"):
             self.tracking=False;
-            cv2.destroyAllWindows()   
+            cv2.destroyAllWindows() 
+        elif (self.myKey==Key.enter):
+               print("Tracking Mode")
         else:
             print("Error!!! wrong entry") #If none of the above, print out wrong entry
 
@@ -356,6 +380,7 @@ class Tracker:
             #load bridge
             self.stream = self.bridge.imgmsg_to_cv2(data, "bgr8")
             if (not self.tracking):
+                printControl()
                 cv2.imshow("Video", self.stream)
                 cv2.waitKey(1) 
             elif(self.first):
@@ -416,12 +441,14 @@ class Tracker:
                     cv2.putText(self.stream, ("x: "+str(coordinateX)+" y:"+str(coordinateX)), (10,40), cv2.FONT_HERSHEY_SIMPLEX, 0.75,(50,170,50),2)
 
                     if (abs(coordinateX)>self.offset and abs(coordinateY)>self.offset):
+                        print("\nFollowing target\n")
                         speedZ, speedR=self.calculateSpeed(coordinateX, coordinateY)
                         self.twist=Twist(Vector3(0.0,0.0,speedZ), Vector3(0.0,0.0,speedR))
                         cv2.putText(self.stream, ("Speed Z: "+str("%.2f" % speedZ)+" R:"+str("%.2f" % speedR)), (10,60), cv2.FONT_HERSHEY_SIMPLEX, 0.75,(50,170,50),2)
                         self.pub_move.publish(self.twist)
                         self.centered=False
                     elif(abs(coordinateX)>self.offset):
+                        print("\nFollowing target\n")
                         _, speedR=self.calculateSpeed(coordinateX, coordinateY)
                         speedZ=0
                         self.twist=Twist(Vector3(0.0,0.0,speedZ), Vector3(0.0,0.0,speedR))
@@ -429,6 +456,7 @@ class Tracker:
                         self.pub_move.publish(self.twist)
                         self.centered=False
                     elif(abs(coordinateY)>self.offset):
+                        print("\nFollowing target\n")
                         speedZ,_=self.calculateSpeed(coordinateX, coordinateY)
                         speedR=0
                         cv2.putText(self.stream, ("Speed Z: "+str("%.2f" % speedZ)+" R:"+str("%.2f" % speedR)), (10,60), cv2.FONT_HERSHEY_SIMPLEX, 0.75,(50,170,50),2)
@@ -436,9 +464,10 @@ class Tracker:
                         self.pub_move.publish(self.twist)
                         self.centered=False
                     else:
-                        self.direction_pub.publish("Correct")
+                        self.direction_pub.publish("\nCorrect\n")
                         cv2.putText(self.stream, "Position Correct", (10,60), cv2.FONT_HERSHEY_SIMPLEX, 0.75,(0,255,0),2)
                         self.centered=True
+                        print("Target reached")
                 else :
                     # Tracking failure
                     cv2.putText(self.stream, "Tracking failure detected", (10,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75,(0,0,255),2)
